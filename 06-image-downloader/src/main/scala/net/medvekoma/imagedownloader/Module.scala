@@ -1,14 +1,12 @@
 package net.medvekoma.imagedownloader
 
-import com.softwaremill.macwire._
-
 object Module {
-  lazy val asyncFileWriter = wire[AsyncFileWriter]
-  lazy val batchFileWriter = wire[BatchFileWriter]
-  lazy val filenameProvider = wire[FilenameProvider]
-  lazy val pageReader = wire[PageReader]
-  lazy val textParser = wire[TextParser]
+  lazy implicit val asyncFileWriter = new AsyncFileWriter
+  lazy implicit val filenameProvider = new FilenameProvider
+  lazy implicit val batchFileWriter = new BatchFileWriter
+  lazy implicit val textParser = new TextParser
+  lazy implicit val pageReader = new PageReader
 
-  lazy val imageDownloader = wire[ImageDownloader]
-  lazy val settingsProvider = wire[SettingsProvider]
+  lazy implicit val imageDownloader = new ImageDownloader
+  lazy implicit val settingsProvider = new SettingsProvider
 }

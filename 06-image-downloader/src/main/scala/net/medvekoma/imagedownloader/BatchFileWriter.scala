@@ -4,7 +4,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 
-class BatchFileWriter(asyncFileWriter: AsyncFileWriter, filenameProvider: FilenameProvider) {
+class BatchFileWriter(implicit asyncFileWriter: AsyncFileWriter, filenameProvider: FilenameProvider) {
 
   def writeFiles(urls: Set[String], targetFolder: String): Unit = {
     val futures = urls.map(url =>
