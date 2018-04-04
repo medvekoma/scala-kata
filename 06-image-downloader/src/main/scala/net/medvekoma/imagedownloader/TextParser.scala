@@ -1,6 +1,6 @@
 package net.medvekoma.imagedownloader
 
-object TextParser {
+trait TextParser {
 
   def getImageUrls(html: String): Set[String] = {
     val imagePattern = """https?:\/\/.*\.jpg""".r

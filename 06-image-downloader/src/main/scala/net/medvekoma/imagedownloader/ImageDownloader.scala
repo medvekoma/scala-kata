@@ -1,9 +1,10 @@
 package net.medvekoma.imagedownloader
 
-object ImageDownloader {
+trait ImageDownloader {
+  this: PageReader with BatchFileWriter =>
 
   def download(sourceUrl: String, targetFolder: String): Unit = {
-    val imageUrls = PageReader.getImageUrls(sourceUrl)
-    BatchFileWriter.writeFiles(imageUrls, targetFolder)
+    val imageUrls = getImageUrlsInPage(sourceUrl)
+    writeFiles(imageUrls, targetFolder)
   }
 }

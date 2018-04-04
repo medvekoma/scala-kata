@@ -1,6 +1,6 @@
 package net.medvekoma.imagedownloader
 
-object SettingsProvider {
+trait SettingsProvider {
 
   def getSettings(args: Array[String]): Settings = {
     Settings(
