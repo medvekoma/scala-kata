@@ -2,12 +2,12 @@ package net.medvekoma.imagedownloader
 
 import scala.io.Source
 
-object PageReader {
+class PageReader(textParser: TextParser) {
 
   def getImageUrls(pageUrl: String): Set[String] = {
     val source = Source.fromURL(pageUrl)
     val html = source.mkString
     source.close()
-    TextParser.getImageUrls(html)
+    textParser.getImageUrls(html)
   }
 }

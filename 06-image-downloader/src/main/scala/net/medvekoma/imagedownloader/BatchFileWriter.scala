@@ -4,11 +4,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 
-object BatchFileWriter {
+class BatchFileWriter(asyncFileWriter: AsyncFileWriter, filenameProvider: FilenameProvider) {
 
   def writeFiles(urls: Set[String], targetFolder: String): Unit = {
     val futures = urls.map(url =>
-      AsyncFileWriter.write(url, FilenameProvider.getFileName(url, targetFolder)))
+      asyncFileWriter.write(url, filenameProvider.getFileName(url, targetFolder)))
     Await.result(Future.sequence(futures), 5.seconds)
     println("Done")
   }
