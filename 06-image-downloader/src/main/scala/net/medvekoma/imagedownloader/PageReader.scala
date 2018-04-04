@@ -1,7 +1,5 @@
 package net.medvekoma.imagedownloader
 
-import net.medvekoma.imagedownloader.utilities.AutoClose
-
 import scala.io.Source
 
 object PageReader {
