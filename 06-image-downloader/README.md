@@ -77,6 +77,30 @@ object TrainStation extends App {
 }
 ```
 
+### Using implicit parameters
+
+This approach is very similar to the manual dependency injection:
+* It uses constructors with parameters
+* Constructor parameters are declared `implicit`
+* Dependencies are created as implicit variables
+
+```scala
+object TrainStation extends App {
+   implicit lazy val pointSwitcher = new PointSwitcher
+   implicit lazy val trainCarCoupler = new TrainCarCoupler
+   implicit lazy val trainShunter = new TrainShunter
+
+   implicit lazy val craneController = new CraneController
+   implicit lazy val trainLoader = new TrainLoader
+
+   implicit lazy val trainDispatch = new TrainDispatch
+
+   implicit lazy val trainStation = new TrainStation
+
+   trainStation.prepareAndDispatchNextTrain()
+}
+```
+
 ### Using MacWire
 
 DI framework with a touch of Scala. 
