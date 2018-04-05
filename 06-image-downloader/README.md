@@ -16,44 +16,38 @@ such a dependency graph so that
 * it is easy to instantiate, and
 * the units are loosely coupled, and can be replaced.
 
-## Dependencies as functions
+## Cake pattern
 
-In functional languages the natural unit of composition is - the function.
-In a pure functional world we can simply compose functions.
+Based on the idea that traits can be composed.
 
-### Composing unary functions
+![Cake pattern](doc/cake.jpg)
 
-```scala
-val imageUrls: String => Set[String] = PageReader.getImageUrls
-val download: Set[String] => Unit = BatchFileWriter.writeFiles(_, "")
-val downloadUrls = imageUrls andThen download
-```
+* Implement all units as traits
 
-### Reader monad
-
-The `scalaz.Reader` monad can wrap a unary function, and provides the regular
-`map` and `flatMap` functions.
-
-This allows using `map` instead of `andThen`, and also enables using for comprehension:
+* Define dependencies as self type annotations
 
 ```scala
-val imageUrls: String => Set[String] = Reader(PageReader.getImageUrls)
-val download: Set[String] => Unit = Reader(BatchFileWriter.writeFiles(_, "")
-val downloadUrls = imageUrls map download
-// or also
-for {
-  images <- imageUrls(url)
-  res <- download(images)
-} yield res
+trait OneService {
+  this: SomeDependency with OtherDependency =>
+  
+  def oneFunction(): String = {
+    val dep1 = someFunction()  // calling function from SomeDependency
+    val dep2 = otherFunction() // calling function from OtherDependency
+    dep1 + dep2.toString
+  }
+}
 ```
 
-Read more: [DI with the Reader monad](http://blog.originate.com/blog/2013/10/21/reader-monad-for-dependency-injection/)
+* Compose an app or module with all traits
 
-## Using Classes, Traits and Objects 
-
-### Cake pattern
+```scala
+object CakePattern extends SomeDependency with OtherDependency with OneService {
+}
+```
 
 More info: [DI with the Cake pattern](http://jonasboner.com/real-world-scala-dependency-injection-di/)
+
+## Classes and Constructors 
 
 ### Manual Dependency Injection
 
@@ -126,3 +120,42 @@ Things to note:
 * lazy val - Scala feature for late evaluation
 
 More info: [DI with MacWire](http://di-in-scala.github.io)
+
+## Dependencies as functions
+
+In functional languages the natural unit of composition is - the function.
+In a pure functional world we can simply compose functions.
+
+### Composing unary functions
+
+```scala
+val imageUrls: String => Set[String] = PageReader.getImageUrls
+val download: Set[String] => Unit = BatchFileWriter.writeFiles(_, "")
+val downloadUrls = imageUrls andThen download
+```
+
+### Reader monad
+
+The `scalaz.Reader` monad can wrap a unary function, and provides the regular
+`map` and `flatMap` functions.
+
+This allows using `map` instead of `andThen`, and also enables using for comprehension:
+
+```scala
+val imageUrls: String => Set[String] = Reader(PageReader.getImageUrls)
+val download: Set[String] => Unit = Reader(BatchFileWriter.writeFiles(_, "")
+val downloadUrls = imageUrls map download
+// or also
+for {
+  images <- imageUrls(url)
+  res <- download(images)
+} yield res
+```
+
+Read more: [DI with the Reader monad](http://blog.originate.com/blog/2013/10/21/reader-monad-for-dependency-injection/)
+
+# Exercises
+
+* Implement one (or more) patterns
+* You can implement SettingsProvider to work from `args`
+* Implement unit tests and substitute mocks for dependencies
