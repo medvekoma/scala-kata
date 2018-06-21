@@ -1,6 +1,6 @@
 package net.medvekoma.imagedownloader
 
-object FilenameProvider {
+trait FilenameProvider {
 
   def getFileName(sourceUrl: String, targetFolder: String): String = {
     val from = sourceUrl.lastIndexOf('/') + 1

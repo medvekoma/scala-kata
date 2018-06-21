@@ -8,7 +8,7 @@ import scala.concurrent.Future
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object AsyncFileWriter {
+trait AsyncFileWriter {
 
   def write(sourceUrl: String, targetFile: String): Future[Unit] = {
     println(s"Saving $targetFile...")

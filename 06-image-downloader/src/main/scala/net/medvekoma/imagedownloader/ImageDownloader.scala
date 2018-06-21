@@ -1,9 +1,15 @@
 package net.medvekoma.imagedownloader
 
-object ImageDownloader {
+import scalaz.Reader
 
-  def download(sourceUrl: String, targetFolder: String): Unit = {
-    val imageUrls = PageReader.getImageUrls(sourceUrl)
-    BatchFileWriter.writeFiles(imageUrls, targetFolder)
-  }
+trait ImageDownloader {
+
+  def download(sourceUrl: String, targetFolder: String) = Reader((config: Config) => {
+
+    val value = config.pageReader.getImageUrls(sourceUrl)
+      .flatMap(urls => config.batchFileWriter.writeFiles(urls, targetFolder))
+    value
+    // values.run(config)
+  })
+
 }
